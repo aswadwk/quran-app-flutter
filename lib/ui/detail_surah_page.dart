@@ -20,6 +20,14 @@ class DetailSurahPage extends StatefulWidget {
   State<DetailSurahPage> createState() => _DetailSurahPageState();
 }
 
+Future<Surah> getDetailSurah({required int noSurat}) async {
+  var response = await Dio().get('https://equran.id/api/v2/surat/${noSurat}');
+
+  if (response.statusCode != 200) throw Exception('Failed to load data');
+
+  return Surah.fromJson(jsonDecode(response.toString())['data']);
+}
+
 class _DetailSurahPageState extends State<DetailSurahPage> {
   late Future<Surah> _detailSurah;
 
@@ -35,8 +43,12 @@ class _DetailSurahPageState extends State<DetailSurahPage> {
       future: _detailSurah,
       initialData: null,
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return const Center(child: Text('Failed to load data'));
+        } else if (!snapshot.hasData) {
+          return const Center(child: Text('No data available'));
         }
         Surah surah = snapshot.data!;
         return Scaffold(
