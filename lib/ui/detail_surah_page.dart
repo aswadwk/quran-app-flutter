@@ -1,12 +1,14 @@
 import 'dart:convert';
 
-import 'package:al_quran/models/surah_model.dart';
-import 'package:al_quran/themes/global_thme.dart';
+import 'package:al_quran/data/models/ayat_model.dart';
+import 'package:al_quran/data/models/surah_model.dart';
+import 'package:al_quran/common/global_thme.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class DetailSurahPage extends StatelessWidget {
   final int noSurat;
@@ -42,27 +44,12 @@ class DetailSurahPage extends StatelessWidget {
             body: Padding(
               padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 24),
               child: ListView.separated(
-                itemBuilder: (context, index) => _ayatItem(),
-                separatorBuilder: (context, index) => Container(
-                  child: Row(
-                    children: [
-                      Stack(
-                        children: [
-                          SvgPicture.asset('assets/svgs/dot_icon.svg'),
-                          SizedBox(
-                            height: 36,
-                            width: 36,
-                            child: Center(child: Text('${index + 1}')),
-                          )
-                        ],
-                      ),
-                      const Spacer(),
-                      Column(
-                        children: [Icon(Icons.no_sim_outlined)],
-                      )
-                    ],
-                  ),
+                itemBuilder: (context, index) => _ayatItem(
+                  context,
+                  ayat: surah.ayat![index],
                 ),
+                separatorBuilder: (context, index) =>
+                    Padding(padding: EdgeInsets.only(top: 10)),
                 itemCount: surah.jumlahAyat,
               ),
             ),
@@ -72,7 +59,68 @@ class DetailSurahPage extends StatelessWidget {
     );
   }
 
-  Container _ayatItem() => Container();
+  Widget _ayatItem(BuildContext context, {required Ayat ayat}) => Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              decoration: BoxDecoration(
+                  color: gray, borderRadius: BorderRadius.circular(10)),
+              child: Row(
+                children: [
+                  Container(
+                    width: 27,
+                    height: 27,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(13.5),
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    child: Center(child: Text(ayat.nomorAyat.toString())),
+                  ),
+                  const Spacer(),
+                  const Icon(
+                    Icons.share_outlined,
+                    color: Colors.black,
+                  ),
+                  const SizedBox(width: 10),
+                  const Icon(
+                    Icons.play_arrow_outlined,
+                    color: Colors.black,
+                  ),
+                  const SizedBox(width: 10),
+                  const Icon(
+                    Icons.bookmark_border_outlined,
+                    color: Colors.black,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 26),
+            Text(
+              ayat.teksArab,
+              style: GoogleFonts.amiri(
+                fontWeight: FontWeight.bold,
+                fontSize: 32,
+                height: 2.2,
+              ).copyWith(
+                color: Colors.white70,
+              ),
+              textAlign: TextAlign.right,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              ayat.teksIndonesia,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(color: Colors.white30),
+              textAlign: TextAlign.left,
+            ),
+          ],
+        ),
+      );
 
   Widget _details(BuildContext context, {required Surah surah}) => Padding(
         padding: EdgeInsets.symmetric(horizontal: 24),

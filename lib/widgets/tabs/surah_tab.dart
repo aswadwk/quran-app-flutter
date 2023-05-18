@@ -1,6 +1,6 @@
-import 'package:al_quran/models/surah_model.dart';
-import 'package:al_quran/pages/detail_surah_page.dart';
-import 'package:al_quran/themes/global_thme.dart';
+import 'package:al_quran/data/models/surah_model.dart';
+import 'package:al_quran/ui/detail_surah_page.dart';
+import 'package:al_quran/common/global_thme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';

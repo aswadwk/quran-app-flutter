@@ -1,4 +1,4 @@
-import 'package:al_quran/themes/global_thme.dart';
+import 'package:al_quran/common/global_thme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 

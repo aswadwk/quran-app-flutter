@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:al_quran/models/ayat_model.dart';
+import 'package:al_quran/data/models/ayat_model.dart';
 
 List<Surah> surahFromJson(String str) =>
     List<Surah>.from(json.decode(str).map((x) => Surah.fromJson(x)));
