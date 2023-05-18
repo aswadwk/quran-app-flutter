@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:al_quran/data/api/detail_surah_service.dart';
 import 'package:al_quran/data/models/ayat_model.dart';
 import 'package:al_quran/data/models/surah_model.dart';
 import 'package:al_quran/common/global_thme.dart';
@@ -10,25 +11,32 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class DetailSurahPage extends StatelessWidget {
+class DetailSurahPage extends StatefulWidget {
   final int noSurat;
 
   const DetailSurahPage({super.key, required this.noSurat});
 
-  Future<Surah> _getDetailSurah() async {
-    var response = await Dio().get('https://equran.id/api/v2/surat/${noSurat}');
+  @override
+  State<DetailSurahPage> createState() => _DetailSurahPageState();
+}
 
-    return Surah.fromJson(jsonDecode(response.toString())['data']);
+class _DetailSurahPageState extends State<DetailSurahPage> {
+  late Future<Surah> _detailSurah;
+
+  @override
+  void initState() {
+    super.initState();
+    _detailSurah = DetailSurahService().getDetailSurah(noSurat: widget.noSurat);
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _getDetailSurah(),
+      future: _detailSurah,
       initialData: null,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Container();
+          return const Center(child: CircularProgressIndicator());
         }
         Surah surah = snapshot.data!;
         return Scaffold(
@@ -38,7 +46,7 @@ class DetailSurahPage extends StatelessWidget {
           body: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) => [
               SliverToBoxAdapter(
-                child: _details(context, surah: surah),
+                child: _headerDetailSurah(context, surah: surah),
               )
             ],
             body: Padding(
@@ -122,7 +130,8 @@ class DetailSurahPage extends StatelessWidget {
         ),
       );
 
-  Widget _details(BuildContext context, {required Surah surah}) => Padding(
+  Widget _headerDetailSurah(BuildContext context, {required Surah surah}) =>
+      Padding(
         padding: EdgeInsets.symmetric(horizontal: 24),
         child: Padding(
           padding: const EdgeInsets.only(top: 10),
