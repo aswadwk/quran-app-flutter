@@ -1,6 +1,6 @@
-import 'package:al_quran/screens/splash_screen.dart';
-import 'package:al_quran/themes/color_schemes.g.dart';
-import 'package:al_quran/themes/text_theme.dart';
+import 'package:al_quran/ui/splash_screen.dart';
+import 'package:al_quran/common/color_schemes.g.dart';
+import 'package:al_quran/common/text_theme.dart';
 import 'package:flutter/material.dart';
 
 void main() {

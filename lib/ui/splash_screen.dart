@@ -1,5 +1,5 @@
-import 'package:al_quran/pages/home_page.dart';
-import 'package:al_quran/themes/global_thme.dart';
+import 'package:al_quran/ui/home_page.dart';
+import 'package:al_quran/common/global_thme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
