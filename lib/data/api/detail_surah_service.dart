@@ -10,8 +10,10 @@ class DetailSurahService {
   Future<Surah> getDetailSurah({required int noSurat}) async {
     var response = await Dio().get('https://equran.id/api/v2/surat/${noSurat}');
 
-    if (response.statusCode != 200) throw Exception('Failed to load data');
+    if (response.statusCode == 200) {
+      return Surah.fromJson(jsonDecode(response.toString())['data']);
+    }
 
-    return Surah.fromJson(jsonDecode(response.toString())['data']);
+    throw Exception('Failed to load data.');
   }
 }
