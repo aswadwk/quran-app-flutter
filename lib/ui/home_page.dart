@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      bottomNavigationBar: _bottomNavigationBar(),
+      bottomNavigationBar: _bottomNavigationBar(context),
       body: _children[_selectedNavbar],
     );
   }
@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: gray,
+        backgroundColor: Theme.of(context).colorScheme.background,
         elevation: 0,
         title: Row(
           children: [
@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
               SliverAppBar(
                 automaticallyImplyLeading: false,
                 elevation: 0,
-                backgroundColor: background,
+                backgroundColor: Theme.of(context).colorScheme.background,
                 pinned: true,
                 bottom: PreferredSize(
                   preferredSize: const Size.fromHeight(0),
@@ -104,7 +104,7 @@ class _HomePageState extends State<HomePage> {
   TabBar _tabBar() {
     return TabBar(tabs: [
       _tabBarItem(label: 'Surah'),
-      _tabBarItem(label: 'Surah'),
+      _tabBarItem(label: 'Ayat'),
       _tabBarItem(label: 'Surah'),
       _tabBarItem(label: 'Surah'),
     ]);
@@ -145,9 +145,9 @@ class _HomePageState extends State<HomePage> {
           height: 131,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            gradient: const LinearGradient(colors: [
-              Color(0xFFDF98FA),
-              Color(0xFF9055FF),
+            gradient: LinearGradient(colors: [
+              Theme.of(context).colorScheme.primary,
+              Theme.of(context).colorScheme.onBackground,
             ]),
           ),
         ),
@@ -185,9 +185,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  BottomNavigationBar _bottomNavigationBar() => BottomNavigationBar(
+  BottomNavigationBar _bottomNavigationBar(BuildContext context) =>
+      BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        backgroundColor: gray,
+        backgroundColor: Theme.of(context).colorScheme.background,
         showSelectedLabels: false,
         showUnselectedLabels: false,
         currentIndex: _selectedNavbar,
@@ -232,7 +233,7 @@ class _HomePageState extends State<HomePage> {
 
   AppBar _appBar(BuildContext context, {required String pageTitle}) => AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: gray,
+        backgroundColor: Theme.of(context).colorScheme.background,
         elevation: 0,
         title: Row(
           children: [
