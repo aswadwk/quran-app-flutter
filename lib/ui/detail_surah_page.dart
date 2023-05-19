@@ -53,7 +53,7 @@ class _DetailSurahPageState extends State<DetailSurahPage> {
         Surah surah = snapshot.data!;
         return Scaffold(
           // child: Text('${noSurat}'),
-          backgroundColor: background,
+          backgroundColor: Theme.of(context).colorScheme.background,
           appBar: _appBar(context, surah: surah),
           body: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) => [
@@ -87,7 +87,9 @@ class _DetailSurahPageState extends State<DetailSurahPage> {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               decoration: BoxDecoration(
-                  color: gray, borderRadius: BorderRadius.circular(10)),
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(.2),
+                borderRadius: BorderRadius.circular(10),
+              ),
               child: Row(
                 children: [
                   Container(
@@ -95,24 +97,25 @@ class _DetailSurahPageState extends State<DetailSurahPage> {
                     height: 27,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(13.5),
-                      color: Theme.of(context).colorScheme.primary,
+                      color:
+                          Theme.of(context).colorScheme.primary.withOpacity(.2),
                     ),
                     child: Center(child: Text(ayat.nomorAyat.toString())),
                   ),
                   const Spacer(),
-                  const Icon(
+                  Icon(
                     Icons.share_outlined,
-                    color: Colors.black,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                   const SizedBox(width: 10),
-                  const Icon(
+                  Icon(
                     Icons.play_arrow_outlined,
-                    color: Colors.black,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                   const SizedBox(width: 10),
-                  const Icon(
+                  Icon(
                     Icons.bookmark_border_outlined,
-                    color: Colors.black,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ],
               ),
@@ -124,18 +127,13 @@ class _DetailSurahPageState extends State<DetailSurahPage> {
                 fontWeight: FontWeight.bold,
                 fontSize: 32,
                 height: 2.2,
-              ).copyWith(
-                color: Colors.white70,
               ),
               textAlign: TextAlign.right,
             ),
             const SizedBox(height: 16),
             Text(
               ayat.teksIndonesia,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium!
-                  .copyWith(color: Colors.white30),
+              style: Theme.of(context).textTheme.bodyMedium,
               textAlign: TextAlign.left,
             ),
           ],
@@ -221,7 +219,7 @@ class _DetailSurahPageState extends State<DetailSurahPage> {
 
   AppBar _appBar(BuildContext context, {required Surah surah}) => AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: gray,
+        backgroundColor: Theme.of(context).colorScheme.background,
         elevation: 0,
         title: Row(
           children: [
