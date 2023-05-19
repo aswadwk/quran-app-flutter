@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:al_quran/data/api/detail_surah_service.dart';
 import 'package:al_quran/data/models/ayat_model.dart';
 import 'package:al_quran/data/models/surah_model.dart';
 import 'package:al_quran/common/global_thme.dart';
@@ -10,35 +11,54 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class DetailSurahPage extends StatelessWidget {
+class DetailSurahPage extends StatefulWidget {
   final int noSurat;
 
   const DetailSurahPage({super.key, required this.noSurat});
 
-  Future<Surah> _getDetailSurah() async {
-    var response = await Dio().get('https://equran.id/api/v2/surat/${noSurat}');
+  @override
+  State<DetailSurahPage> createState() => _DetailSurahPageState();
+}
 
-    return Surah.fromJson(jsonDecode(response.toString())['data']);
+Future<Surah> getDetailSurah({required int noSurat}) async {
+  var response = await Dio().get('https://equran.id/api/v2/surat/${noSurat}');
+
+  if (response.statusCode != 200) throw Exception('Failed to load data');
+
+  return Surah.fromJson(jsonDecode(response.toString())['data']);
+}
+
+class _DetailSurahPageState extends State<DetailSurahPage> {
+  late Future<Surah> _detailSurah;
+
+  @override
+  void initState() {
+    super.initState();
+    _detailSurah = DetailSurahService().getDetailSurah(noSurat: widget.noSurat);
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _getDetailSurah(),
+      future: _detailSurah,
       initialData: null,
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Container();
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return const Center(child: Text('Failed to load data'));
+        } else if (!snapshot.hasData) {
+          return const Center(child: Text('No data available'));
         }
         Surah surah = snapshot.data!;
         return Scaffold(
           // child: Text('${noSurat}'),
-          backgroundColor: background,
+          backgroundColor: Theme.of(context).colorScheme.background,
           appBar: _appBar(context, surah: surah),
           body: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) => [
               SliverToBoxAdapter(
-                child: _details(context, surah: surah),
+                child: _headerDetailSurah(context, surah: surah),
               )
             ],
             body: Padding(
@@ -67,7 +87,9 @@ class DetailSurahPage extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               decoration: BoxDecoration(
-                  color: gray, borderRadius: BorderRadius.circular(10)),
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(.2),
+                borderRadius: BorderRadius.circular(10),
+              ),
               child: Row(
                 children: [
                   Container(
@@ -75,24 +97,25 @@ class DetailSurahPage extends StatelessWidget {
                     height: 27,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(13.5),
-                      color: Theme.of(context).colorScheme.primary,
+                      color:
+                          Theme.of(context).colorScheme.primary.withOpacity(.2),
                     ),
                     child: Center(child: Text(ayat.nomorAyat.toString())),
                   ),
                   const Spacer(),
-                  const Icon(
+                  Icon(
                     Icons.share_outlined,
-                    color: Colors.black,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                   const SizedBox(width: 10),
-                  const Icon(
+                  Icon(
                     Icons.play_arrow_outlined,
-                    color: Colors.black,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                   const SizedBox(width: 10),
-                  const Icon(
+                  Icon(
                     Icons.bookmark_border_outlined,
-                    color: Colors.black,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ],
               ),
@@ -104,25 +127,21 @@ class DetailSurahPage extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 fontSize: 32,
                 height: 2.2,
-              ).copyWith(
-                color: Colors.white70,
               ),
               textAlign: TextAlign.right,
             ),
             const SizedBox(height: 16),
             Text(
               ayat.teksIndonesia,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium!
-                  .copyWith(color: Colors.white30),
+              style: Theme.of(context).textTheme.bodyMedium,
               textAlign: TextAlign.left,
             ),
           ],
         ),
       );
 
-  Widget _details(BuildContext context, {required Surah surah}) => Padding(
+  Widget _headerDetailSurah(BuildContext context, {required Surah surah}) =>
+      Padding(
         padding: EdgeInsets.symmetric(horizontal: 24),
         child: Padding(
           padding: const EdgeInsets.only(top: 10),
@@ -200,7 +219,7 @@ class DetailSurahPage extends StatelessWidget {
 
   AppBar _appBar(BuildContext context, {required Surah surah}) => AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: gray,
+        backgroundColor: Theme.of(context).colorScheme.background,
         elevation: 0,
         title: Row(
           children: [

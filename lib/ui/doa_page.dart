@@ -11,8 +11,8 @@ class DoaPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(title: 'Tips Page'),
-      body: Text('Tips Page'),
+      appBar: AppBarWidget(title: 'Doa Page'),
+      body: Text('Doa Page'),
     );
   }
 }

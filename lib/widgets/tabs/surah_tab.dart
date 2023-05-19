@@ -105,7 +105,6 @@ Widget _surahItem(BuildContext context, {required Surah surah}) =>
               style: GoogleFonts.amiri(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.primary,
               ),
             ),
           ],

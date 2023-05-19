@@ -9,8 +9,8 @@ class BookmarkPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(title: 'Tips Page'),
-      body: Text('Tips Page'),
+      appBar: AppBarWidget(title: 'Bookmark Page'),
+      body: Text('Bookmark Page'),
     );
   }
 }
