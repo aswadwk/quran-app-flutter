@@ -51,6 +51,7 @@ class _DetailSurahPageState extends State<DetailSurahPage> {
           return const Center(child: Text('No data available'));
         }
         Surah surah = snapshot.data!;
+        print(surah.ayat![0].audio);
         return Scaffold(
           // child: Text('${noSurat}'),
           backgroundColor: Theme.of(context).colorScheme.background,
@@ -104,12 +105,12 @@ class _DetailSurahPageState extends State<DetailSurahPage> {
                   ),
                   const Spacer(),
                   Icon(
-                    Icons.share_outlined,
+                    Icons.play_arrow_outlined,
                     color: Theme.of(context).colorScheme.primary,
                   ),
                   const SizedBox(width: 10),
                   Icon(
-                    Icons.play_arrow_outlined,
+                    Icons.share_outlined,
                     color: Theme.of(context).colorScheme.primary,
                   ),
                   const SizedBox(width: 10),
@@ -136,6 +137,7 @@ class _DetailSurahPageState extends State<DetailSurahPage> {
               style: Theme.of(context).textTheme.bodyMedium,
               textAlign: TextAlign.left,
             ),
+            Text(ayat.audio[01].toString())
           ],
         ),
       );
