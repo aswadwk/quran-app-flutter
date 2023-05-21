@@ -12,7 +12,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: background,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: Center(
           child: Padding(
@@ -45,29 +45,39 @@ class SplashScreen extends StatelessWidget {
                       child: SvgPicture.asset('assets/svgs/splash_img.svg'),
                     ),
                     Positioned(
-                      bottom: -26,
+                      bottom: -36,
                       left: 0,
                       right: 0,
-                      child: Center(
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => HomePage(),
-                            ));
-                          },
-                          child: Container(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 16,
+                          horizontal: 40,
+                        ),
+                        child: FilledButton(
+                          style: ElevatedButton.styleFrom(
+                            // primary: orange,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .headlineLarge!
+                                .copyWith(
+                                  color: Colors.white70,
+                                ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(60),
+                            ),
                             padding: const EdgeInsets.symmetric(
                               horizontal: 40,
                               vertical: 16,
                             ),
-                            decoration: BoxDecoration(
-                                color: orange,
-                                borderRadius: BorderRadius.circular(60)),
-                            child: Text(
-                              'Get Started',
-                              style: Theme.of(context).textTheme.headlineMedium,
-                            ),
                           ),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => HomePage(),
+                            ));
+                          },
+                          child: Text('Get Started'),
                         ),
                       ),
                     ),
