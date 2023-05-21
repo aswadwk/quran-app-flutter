@@ -4,10 +4,9 @@ import 'package:al_quran/data/api/detail_surah_service.dart';
 import 'package:al_quran/data/models/ayat_model.dart';
 import 'package:al_quran/data/models/surah_model.dart';
 import 'package:al_quran/common/global_thme.dart';
+import 'package:al_quran/widgets/audio_player_widget.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -51,7 +50,9 @@ class _DetailSurahPageState extends State<DetailSurahPage> {
           return const Center(child: Text('No data available'));
         }
         Surah surah = snapshot.data!;
+        // set isPlaying to false and set count of isPlaying to jumlahAyat
         print(surah.ayat![0].audio);
+        print(surah.ayat![0].audio['05']);
         return Scaffold(
           // child: Text('${noSurat}'),
           backgroundColor: Theme.of(context).colorScheme.background,
@@ -70,7 +71,7 @@ class _DetailSurahPageState extends State<DetailSurahPage> {
                   ayat: surah.ayat![index],
                 ),
                 separatorBuilder: (context, index) =>
-                    Padding(padding: EdgeInsets.only(top: 10)),
+                    const Padding(padding: EdgeInsets.only(top: 10)),
                 itemCount: surah.jumlahAyat,
               ),
             ),
@@ -86,7 +87,7 @@ class _DetailSurahPageState extends State<DetailSurahPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.onSurface.withOpacity(.2),
                 borderRadius: BorderRadius.circular(10),
@@ -104,10 +105,7 @@ class _DetailSurahPageState extends State<DetailSurahPage> {
                     child: Center(child: Text(ayat.nomorAyat.toString())),
                   ),
                   const Spacer(),
-                  Icon(
-                    Icons.play_arrow_outlined,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+                  AudioPlayerWidget(audioUrl: ayat.audio['05']!),
                   const SizedBox(width: 10),
                   Icon(
                     Icons.share_outlined,
@@ -137,7 +135,7 @@ class _DetailSurahPageState extends State<DetailSurahPage> {
               style: Theme.of(context).textTheme.bodyMedium,
               textAlign: TextAlign.left,
             ),
-            Text(ayat.audio[01].toString())
+            // Text(ayat.audio['05']!.toString())
           ],
         ),
       );
