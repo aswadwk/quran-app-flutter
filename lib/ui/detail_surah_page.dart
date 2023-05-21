@@ -5,6 +5,7 @@ import 'package:al_quran/data/models/ayat_model.dart';
 import 'package:al_quran/data/models/surah_model.dart';
 import 'package:al_quran/common/global_thme.dart';
 import 'package:al_quran/widgets/audio_player_widget.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -29,11 +30,45 @@ Future<Surah> getDetailSurah({required int noSurat}) async {
 
 class _DetailSurahPageState extends State<DetailSurahPage> {
   late Future<Surah> _detailSurah;
+  AudioPlayer _audioPlayer = AudioPlayer();
+  bool _isPlaying = false;
 
   @override
   void initState() {
     super.initState();
     _detailSurah = DetailSurahService().getDetailSurah(noSurat: widget.noSurat);
+    _audioPlayer.onPlayerStateChanged.listen((event) {
+      if (event == PlayerState.completed) {
+        setState(() {
+          _isPlaying = false;
+        });
+      }
+
+      if (event == PlayerState.stopped) {
+        setState(() {
+          _isPlaying = false;
+        });
+      }
+
+      if (event == PlayerState.playing) {
+        setState(() {
+          _isPlaying = true;
+        });
+      }
+
+      if (event == PlayerState.paused) {
+        setState(() {
+          _isPlaying = false;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _audioPlayer.onPlayerStateChanged.listen(null);
+    _audioPlayer.dispose();
   }
 
   @override
@@ -52,7 +87,7 @@ class _DetailSurahPageState extends State<DetailSurahPage> {
         Surah surah = snapshot.data!;
         // set isPlaying to false and set count of isPlaying to jumlahAyat
         print(surah.ayat![0].audio);
-        print(surah.ayat![0].audio['05']);
+        print(surah.audioFull['05']);
         return Scaffold(
           // child: Text('${noSurat}'),
           backgroundColor: Theme.of(context).colorScheme.background,
@@ -75,6 +110,18 @@ class _DetailSurahPageState extends State<DetailSurahPage> {
                 itemCount: surah.jumlahAyat,
               ),
             ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () async {
+              if (_isPlaying) {
+                await _audioPlayer.pause();
+              } else {
+                await _audioPlayer.play(UrlSource(surah.audioFull['05']!));
+              }
+            },
+            child: _isPlaying
+                ? const Icon(Icons.pause)
+                : const Icon(Icons.play_arrow),
           ),
         );
       },

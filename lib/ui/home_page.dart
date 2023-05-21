@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: DefaultTabController(
-        length: 4,
+        length: 3,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: NestedScrollView(
@@ -104,9 +104,8 @@ class _HomePageState extends State<HomePage> {
   TabBar _tabBar() {
     return TabBar(tabs: [
       _tabBarItem(label: 'Surah'),
-      _tabBarItem(label: 'Ayat'),
-      _tabBarItem(label: 'Surah'),
-      _tabBarItem(label: 'Surah'),
+      _tabBarItem(label: 'Tafsir'),
+      _tabBarItem(label: 'Jus'),
     ]);
   }
 
